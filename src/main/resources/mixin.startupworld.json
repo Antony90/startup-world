@@ -1,0 +1,11 @@
+{
+    "package": "io.yent.startupworld.mixin",
+    "required": true,
+    "minVersion": "0.8",
+    "mixins": ["MinecraftStartupMixin"],
+    "refmap": "mixin.startupworld.refmap.json",
+    "compatabilityLevel": "JAVA_17",
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
