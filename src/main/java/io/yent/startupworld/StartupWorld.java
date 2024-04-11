@@ -12,8 +12,7 @@ import net.minecraftforge.fml.config.ModConfig.Type;
 import org.slf4j.Logger;
 
 @Mod(StartupWorld.MODID)
-public class StartupWorld
-{
+public class StartupWorld {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "startupworld";
     // Directly reference a slf4j logger
@@ -23,8 +22,8 @@ public class StartupWorld
         ModLoadingContext.get().registerConfig(Type.CLIENT, Config.SPEC);
     }
 
-    public static void run() {
-        
+    public static boolean loadWorld() {
+
         Minecraft client = Minecraft.getInstance();
         Screen screen = client.screen;
 
@@ -34,15 +33,15 @@ public class StartupWorld
         // Use config world name if exists
         if (Config.worldName.length() > 0) {
             LOGGER.info("Loading world \"" + Config.worldName + "\" from configuration");
-            worldOpenFlows.loadLevel(screen, Config.worldName);    
-            return;
+            worldOpenFlows.loadLevel(screen, Config.worldName);
+            return true;
         }
-        
+
         // Find and load the last modified world
         LOGGER.info("Finding last modified world");
         long latestLastPlayedTime = Long.MIN_VALUE;
         String lastPlayedWorldName = null;
-        
+
         for (LevelStorageSource.LevelDirectory lvl : lvlStorageSrc.findLevelCandidates()) {
             long lastModified = lvl.path().toFile().lastModified();
 
@@ -58,5 +57,7 @@ public class StartupWorld
             LOGGER.info("Loading last modified world \"" + lastPlayedWorldName + "\"");
             worldOpenFlows.loadLevel(screen, lastPlayedWorldName);
         }
+
+        return lastPlayedWorldName != null;
     }
 }
